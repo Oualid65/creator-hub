@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Creator Hub & Tool-Verzeichnis</title>
+  <style>
+    /* 1. CSS-Variablen: Profis speichern Farben zentral an einem Ort */
+    :root {
+      --bg-dark: #090a0f;
+      --card-bg: #161822;
+      --border: #2a2e42;
+      --accent: #7c3aed;
+      --accent-pink: #ec4899;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 40px 16px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* Profil-Bereich */
+    .avatar {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-pink));
+      border-radius: 50%;
+      margin: 0 auto 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0 0 6px 0;
+    }
+
+    .bio {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    /* 2. Filter-Leiste */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .filter-btn {
+      background-color: var(--card-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.aktiv, .filter-btn:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* 3. Tool-Karten mit Flexbox */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      background-color: rgba(124, 58, 237, 0.2);
+      color: #c4b5fd;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .card-info h3 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+    }
+
+    .card-info p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .btn-link {
+      background: linear-gradient(45deg, var(--accent), var(--accent-pink));
+      color: white;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
+    .search-box {
+      width: 100%;
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent); /* Leuchtet lila, wenn man reinklickt */
+    }
+/* 9:16 Video-Showcase Grid */
+    .section-title {
+      font-size: 18px;
+      text-align: left;
+      margin: 28px 0 12px 0;
+      font-weight: bold;
+    }
+
+    .video-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto; /* Erlaubt seitliches Wischen auf Handys */
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    /* Versteckt die Scrollleiste für einen sauberen Look */
+    .video-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .video-card {
+      flex: 0 0 130px;
+      height: 230px; /* Echtes 9:16 Hochformat-Verhältnis */
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 10px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .video-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    /* Dunkler Farbverlauf über dem Video-Hintergrund für lesbaren Text */
+    .video-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+    }
+
+    .video-info {
+      position: relative;
+      z-index: 1;
+    }
+
+    .video-title {
+      font-size: 12px;
+      font-weight: bold;
+      margin: 0 0 2px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .video-views {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- NEU: Zurück-Navigation zum Haupt-Hub -->
+    <div style="text-align: left; margin-bottom: 16px;">
+      <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: bold;">← Zurück zum Creator Hub</a>
+    </div>
+
+    <h1>📊 AI Content Pipeline</h1>
+    <div class="avatar">🚀</div>
+    <h1>AI Creator Studio</h1>
+    <p class="bio">Meine KI-Tools, Workflows & eigenen Web-Apps für Shorts</p>
+
+    <!-- NEU: Echtzeit-Suchfeld -->
+    <input type="text" id="suchfeld" class="search-box" placeholder="🔍 Tool oder App suchen (z. B. Higgsfield, Stimme)..." oninput="sucheTools()">
+
+    <!-- Interaktive Kategorie-Filter -->
+    <div class="filter-bar">
+      <button class="filter-btn aktiv" onclick="filterTools('alle', this)">Alle</button>
+      <button class="filter-btn" onclick="filterTools('video', this)">🎥 Video-KI</button>
+      <button class="filter-btn" onclick="filterTools('voice', this)">🎙️ KI-Stimme</button>
+      <button class="filter-btn" onclick="filterTools('app', this)">⚡ Meine Apps</button>
+    </div>
+    <!-- 9:16 Video Showcase -->
+    <h2 class="section-title">🎬 Meine TikToks & Shorts</h2>
+    <div class="video-grid">
+      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: #1f2937;">
+        <div class="video-info">
+          <p class="video-title">Cyberpunk Tokio</p>
+          <p class="video-views">▶ 12.4K Aufrufe</p>
+        </div>
+      </a>
+      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: #1f2937;">
+        <div class="video-info">
+          <p class="video-title">AI Prompt Hack</p>
+          <p class="video-views">▶ 8.1K Aufrufe</p>
+        </div>
+      </a>
+      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: #1f2937;">
+        <div class="video-info">
+          <p class="video-title">Neon Auto Intro</p>
+          <p class="video-views">▶ 25.0K Aufrufe</p>
+        </div>
+      </a>
+    </div>
+    <!-- Tool-Karten (mit unsichtbarem data-kategorie Etikett) -->
+    <div class="card" data-kategorie="video">
+      <div class="card-info">
+        <span class="badge">Video-Generator</span>
+        <h3>Higgsfield AI</h3>
+        <p>Cineastische Kamerafahrten & KI-Charaktere für Shorts</p>
+      </div>
+      <a href="https://higgsfield.ai" target="_blank" class="btn-link">Zum Tool ↗</a>
+    </div>
+
+    <div class="card" data-kategorie="voice">
+      <div class="card-info">
+        <span class="badge">Voice-KI (Profi-Tipp)</span>
+        <h3>ElevenLabs</h3>
+        <p>Extrem menschliche deutsche KI-Stimmen für Faceless-Videos</p>
+      </div>
+      <a href="https://elevenlabs.io" target="_blank" class="btn-link">Testen ↗</a>
+    </div>
+
+    <div class="card" data-kategorie="app">
+      <div class="card-info">
+        <span class="badge">Eigenes Projekt #1</span>
+        <h3>Higgsfield Prompt-Mixer</h3>
+        <p>Mein selbst programmierter Zufalls-Generator für Video-Ideen</p>
+      </div>
+      <!-- HIER kannst du deinen echten GitHub-Link eintragen! -->
+      <a href="#" target="_blank" class="btn-link">App öffnen ⚡</a>
+    </div>
+
+    <div class="card" data-kategorie="app">
+      <div class="card-info">
+        <span class="badge">Eigenes Projekt #2</span>
+        <h3>Viral-Hook & Teleprompter</h3>
+        <p>3-Sekunden-Hooks & Sprechzeit-Rechner für TikToks</p>
+      </div>
+      <a href="#" target="_blank" class="btn-link">App öffnen ⚡</a>
+    </div>
+  </div>
+
+  <script>
+    function filterTools(gewaehlteKategorie, geklickterButton) {
+      // 1. Alle Karten auf der Seite suchen
+      const alleKarten = document.querySelectorAll(".card");
+
+      alleKarten.forEach(karte => {
+        const kartenKategorie = karte.getAttribute("data-kategorie");
+
+        // 2. Prüfen, ob die Karte zur gewählten Kategorie passt
+        if (gewaehlteKategorie === "alle" || kartenKategorie === gewaehlteKategorie) {
+          karte.style.display = "flex"; // Anzeigen
+        } else {
+          karte.style.display = "none"; // Ausblenden
+        }
+      });
+
+      // 3. Optisches Highlight auf den angeklickten Filter-Button setzen
+      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("aktiv"));
+      geklickterButton.classList.add("aktiv");
+    }
+    function sucheTools() {
+      // 1. Eingetippten Text holen und in Kleinbuchstaben umwandeln
+      const suchbegriff = document.getElementById("suchfeld").value.toLowerCase();
+      const alleKarten = document.querySelectorAll(".card");
+
+      alleKarten.forEach(karte => {
+        // 2. Den gesamten Text der Karte ebenfalls in Kleinbuchstaben lesen
+        const kartenText = karte.innerText.toLowerCase();
+
+        // 3. Prüfen, ob der Suchbegriff im Kartentext steckt
+        if (kartenText.includes(suchbegriff)) {
+          karte.style.display = "flex";
+        } else {
+          karte.style.display = "none";
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

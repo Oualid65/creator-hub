@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Viral-Hook & Teleprompter</title>
+  <style>
+    :root {
+      --bg-dark: #090a0f;
+      --card-bg: #161822;
+      --border: #2a2e42;
+      --accent: #7c3aed;
+      --accent-pink: #ec4899;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 36px 16px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .back-nav {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .back-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 0 0 14px 0;
+    }
+
+    .hook-box {
+      background-color: #0f111a;
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 17px;
+      color: #f7768e;
+      margin: 16px 0;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+
+    button {
+      background: linear-gradient(45deg, var(--accent), var(--accent-pink));
+      color: white;
+      border: none;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .teleprompter-section {
+      margin-top: 28px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin: 0 0 12px 0;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      background-color: #0f111a;
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .duration-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .timer-row {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .timer-display {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="back-nav">
+      <a href="index.html">← Zurück zum Creator Hub</a>
+    </div>
+
+    <div class="card">
+      <h2>⏱️ 3-Sekunden Viral-Hook</h2>
+      <div class="hook-box" id="hook-text">
+        „Ich wette, du hast diesen KI-Trick noch nie gesehen...“
+      </div>
+      <button onclick="naechsterHook()">Nächster Hook ⚡</button>
+
+      <!-- Teleprompter & Laufzeit-Berechnung -->
+      <div class="teleprompter-section">
+        <h3>📝 Skript & Sprechzeit-Rechner</h3>
+        <textarea id="skript-input" placeholder="Schreibe oder kopiere hier dein Video-Skript für ElevenLabs oder deine eigene Aufnahme hinein..." oninput="berechneLaufzeit()"></textarea>
+        <p id="laufzeit-anzeige" class="duration-info">Geschätzte Dauer: ca. 0 Sekunden (0 Wörter)</p>
+
+        <!-- Live-Stoppuhr -->
+        <div class="timer-row">
+          <button onclick="starteAufnahme()" id="aufnahme-btn" style="background: linear-gradient(45deg, #10b981, #059669);">🔴 Aufnahme starten</button>
+          <span id="timer-anzeige" class="timer-display">00:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function naechsterHook() {
+      const hooks = [
+        "„Ich wette, du hast diesen KI-Trick noch nie gesehen...“",
+        "„Hör sofort auf, deine Videos so zu schneiden! Mach stattdessen das...“",
+        "„Das wird die Art, wie du Content machst, komplett verändern...“",
+        "„Drei KI-Tools, die dir sofort Stunden an Arbeit sparen...“",
+        "„Niemand spricht über diese geheime Website, aber sie ist komplett kostenlos...“"
+      ];
+
+      const zufall = Math.floor(Math.random() * hooks.length);
+      document.getElementById("hook-text").innerText = hooks[zufall];
+    }
+
+    function berechneLaufzeit() {
+      const text = document.getElementById("skript-input").value.trim();
+      
+      if (text === "") {
+        document.getElementById("laufzeit-anzeige").innerText = "Geschätzte Dauer: ca. 0 Sekunden (0 Wörter)";
+        return;
+      }
+
+      const woerter = text.split(/\s+/).length;
+      const sekunden = Math.round(woerter / 2.5);
+
+      document.getElementById("laufzeit-anzeige").innerText = `Geschätzte Dauer: ca. ${sekunden} Sekunden (${woerter} Wörter)`;
+    }
+
+    let timerInterval;
+    let sekundenZaehler = 0;
+    let istAktiv = false;
+
+    function starteAufnahme() {
+      const btn = document.getElementById("aufnahme-btn");
+      
+      if (!istAktiv) {
+        istAktiv = true;
+        btn.innerText = "⏹️ Stoppen";
+        btn.style.background = "linear-gradient(45deg, #ef4444, #dc2626)";
+        
+        sekundenZaehler = 0;
+        document.getElementById("timer-anzeige").innerText = "00:00";
+        timerInterval = setInterval(() => {
+          sekundenZaehler++;
+          let min = Math.floor(sekundenZaehler / 60);
+          let sek = sekundenZaehler % 60;
+          let anzeigeMin = min < 10 ? "0" + min : min;
+          let anzeigeSek = sek < 10 ? "0" + sek : sek;
+          document.getElementById("timer-anzeige").innerText = `${anzeigeMin}:${anzeigeSek}`;
+        }, 1000);
+      } else {
+        istAktiv = false;
+        btn.innerText = "🔴 Aufnahme starten";
+        btn.style.background = "linear-gradient(45deg, #10b981, #059669)";
+        clearInterval(timerInterval);
+      }
+    }
+  </script>
+
+</body>
+</html>
