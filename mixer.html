@@ -11,6 +11,7 @@
       --border: #2a2e42;
       --accent: #7c3aed;
       --accent-pink: #ec4899;
+      --green: #10b981;
       --text-main: #ffffff;
       --text-muted: #94a3b8;
     }
@@ -30,7 +31,9 @@
     }
 
     .back-nav {
-      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 16px;
     }
 
@@ -39,6 +42,10 @@
       text-decoration: none;
       font-size: 13px;
       font-weight: bold;
+    }
+
+    .back-nav a:hover {
+      color: white;
     }
 
     .card {
@@ -86,15 +93,25 @@
       background: linear-gradient(45deg, var(--accent), var(--accent-pink));
       color: white;
       border: none;
-      padding: 11px 18px;
-      font-size: 14px;
+      padding: 11px 16px;
+      font-size: 13px;
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:active {
+      transform: scale(0.97);
     }
 
     .btn-secondary {
       background: #2a2e42;
+    }
+
+    /* NEU: Grüner Pipeline-Button */
+    .btn-pipeline {
+      background: linear-gradient(45deg, #10b981, #059669);
     }
 
     .btn-danger {
@@ -137,8 +154,10 @@
 <body>
 
   <div class="container">
+    <!-- Oben links zurück zum Hub, oben rechts direkt zur Pipeline -->
     <div class="back-nav">
       <a href="index.html">← Zurück zum Creator Hub</a>
+      <a href="planner.html" style="color: #10b981;">Zur Pipeline 📊 →</a>
     </div>
 
     <div class="card">
@@ -153,6 +172,8 @@
         <button onclick="neueIdee()">Neue Idee 🎲</button>
         <button class="btn-secondary" id="copy-button" onclick="kopierePrompt()">Kopieren 📋</button>
         <button class="btn-secondary" onclick="merkePrompt()">⭐ Merken</button>
+        <!-- NEU: Direkter Pipeline-Transfer -->
+        <button class="btn-pipeline" id="pipeline-button" onclick="inPipelineSenden()">📊 In Pipeline</button>
       </div>
 
       <div class="saved-section">
@@ -164,6 +185,8 @@
   </div>
 
   <script>
+    let hatSchonGeneriert = false;
+
     window.onload = function() {
       const gespeichertePrompts = JSON.parse(localStorage.getItem("meinePrompts")) || [];
       const liste = document.getElementById("merkliste");
@@ -205,6 +228,8 @@
 
       document.getElementById("idee-text").innerText = fertigerPrompt;
       document.getElementById("copy-button").innerText = "Kopieren 📋";
+      document.getElementById("pipeline-button").innerText = "📊 In Pipeline";
+      hatSchonGeneriert = true;
     }
 
     function kopierePrompt() {
@@ -214,6 +239,7 @@
     }
 
     function merkePrompt() {
+      if (!hatSchonGeneriert) neueIdee();
       const text = document.getElementById("idee-text").innerText;
       
       const neuerPunkt = document.createElement("li");
@@ -223,6 +249,34 @@
       let gespeichertePrompts = JSON.parse(localStorage.getItem("meinePrompts")) || [];
       gespeichertePrompts.push(text);
       localStorage.setItem("meinePrompts", JSON.stringify(gespeichertePrompts));
+    }
+
+    // NEU: Schreibt den Prompt direkt in den Speicher der Content-Pipeline (planner.html)
+    function inPipelineSenden() {
+      // Falls noch kein Prompt gewürfelt wurde, automatisch erst einen würfeln
+      if (!hatSchonGeneriert) {
+        neueIdee();
+      }
+
+      const text = document.getElementById("idee-text").innerText;
+
+      // 1. Bestehende Pipeline-Liste aus dem Browser-Speicher holen
+      let projekte = JSON.parse(localStorage.getItem("creatorPipeline")) || [];
+
+      // 2. Exakt das Daten-Objekt bauen, das planner.html erwartet
+      const neuesProjekt = {
+        id: Date.now(),
+        titel: text,
+        tool: "🎥 Higgsfield + ElevenLabs",
+        status: "idee"
+      };
+
+      // 3. Zur Liste hinzufügen und im selben Tresor-Fach ("creatorPipeline") speichern
+      projekte.push(neuesProjekt);
+      localStorage.setItem("creatorPipeline", JSON.stringify(projekte));
+
+      // 4. Visuelles Feedback auf dem Button geben
+      document.getElementById("pipeline-button").innerText = "Gesendet! 🚀";
     }
 
     function listeLeeren() {
