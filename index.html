@@ -122,8 +122,10 @@
 
     .video-card {
       flex: 0 0 130px;
-      height: 230px;
+      height: 230px; /* Echtes 9:16 Hochformat */
       background-color: var(--card-bg);
+      background-size: cover;       /* NEU: Füllt die 9:16-Kachel automatisch aus */
+      background-position: center;  /* NEU: Zentriert das Bild oder GIF perfekt */
       border: 1px solid var(--border);
       border-radius: 12px;
       display: flex;
@@ -136,6 +138,16 @@
       text-decoration: none;
       color: white;
       transition: transform 0.2s, border-color 0.2s;
+    }
+
+    /* Optional für echte MP4-Videoloops im Hintergrund */
+    .video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
     }
 
     .video-card:hover {
@@ -250,29 +262,38 @@
       <button class="filter-btn" onclick="filterTools('app', this)">⚡ Meine Apps</button>
     </div>
 
-    <!-- 9:16 Video Showcase -->
+   <!-- 9:16 Video Showcase mit deinen echten Reise-TikToks -->
     <h2 class="section-title">🎬 Meine TikToks & Shorts</h2>
     <div class="video-grid">
-      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: linear-gradient(135deg, #1e1b4b, #4c1d95);">
+      
+      <!-- Kachel 1 -->
+      <a href="https://www.tiktok.com/@ouara.frame/video/7435760320594840864?is_from_webapp=1&sender_device=pc&web_id=7697917107879003670" target="_blank" class="video-card">
+        <video class="video-bg" src="reise1.mp4" autoplay loop muted playsinline></video>
         <div class="video-info">
-          <p class="video-title">Cyberpunk Tokio</p>
-          <p class="video-views">▶ 12.4K Aufrufe</p>
+          <p class="video-title">Reise-Highlight #1</p>
+          <p class="video-views">▶ Auf TikTok ansehen</p>
         </div>
       </a>
-      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: linear-gradient(135deg, #064e3b, #047857);">
-        <div class="video-info">
-          <p class="video-title">AI Prompt Hack</p>
-          <p class="video-views">▶ 8.1K Aufrufe</p>
-        </div>
-      </a>
-      <a href="https://tiktok.com" target="_blank" class="video-card" style="background: linear-gradient(135deg, #4c0519, #be123c);">
-        <div class="video-info">
-          <p class="video-title">Neon Auto Intro</p>
-          <p class="video-views">▶ 25.0K Aufrufe</p>
-        </div>
-      </a>
-    </div>
 
+      <!-- Kachel 2 -->
+      <a href="https://www.tiktok.com/@ouara.frame/video/7436860183659269408?is_from_webapp=1&sender_device=pc&web_id=7697917107879003670" target="_blank" class="video-card">
+        <video class="video-bg" src="reise2.mp4" autoplay loop muted playsinline></video>
+        <div class="video-info">
+          <p class="video-title">Reise-Highlight #2</p>
+          <p class="video-views">▶ Auf TikTok ansehen</p>
+        </div>
+      </a>
+
+      <!-- Kachel 3 -->
+      <a href="https://www.tiktok.com/@ouara.frame/video/7550771483501514006" target="_blank" class="video-card">
+        <video class="video-bg" src="reise3.mp4" autoplay loop muted playsinline></video>
+        <div class="video-info">
+          <p class="video-title">Reise-Highlight #3</p>
+          <p class="video-views">▶ Auf TikTok ansehen</p>
+        </div>
+      </a>
+
+    </div>
     <!-- Tool- & App-Verzeichnis -->
     <h2 class="section-title">🛠️ Tools & Eigene Web-Apps</h2>
 
